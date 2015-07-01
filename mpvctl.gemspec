@@ -5,7 +5,7 @@ require 'mpvctl/version'
 
 Gem::Specification.new do |spec|
   spec.name          = "mpvctl"
-  spec.version       = Mpvctl::VERSION
+  spec.version       = MpvCtl::VERSION
   spec.authors       = ["John Hawthorn"]
   spec.email         = ["john.hawthorn@gmail.com"]
 
