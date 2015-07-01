@@ -12,6 +12,16 @@ module MpvCtl
       socket.command 'loadfile', path
     end
 
+    def seek(seconds, type)
+      type =
+        case type
+        when :relative then 'relative'
+        when :absolute then 'absolute'
+        else raise ArgumentError, "unknown seek type"
+        end
+      socket.command 'seek', seconds, type
+    end
+
     def close
       socket.close
     end

@@ -19,6 +19,22 @@ module MpvCtl
       end
     end
 
+    desc "seek [+-]SECONDS", "Seeks by seconds."
+    def seek(seconds)
+      seek = :relative
+      if seconds =~ /\A-(.*)\z/
+        seconds = -Integer($1)
+      elsif seconds =~ /\A\+(.*)\z/
+        seconds = Integer($1)
+      else
+        seconds = Integer(seconds)
+        seek = :absolute
+      end
+      with_mpv do |mpv|
+        mpv.seek(seconds, seek)
+      end
+    end
+
     private
     def with_mpv
       mpv = MpvCtl::Mpv.new
