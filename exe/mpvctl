@@ -1,0 +1,7 @@
+#!/usr/bin/ruby
+
+require 'mpvctl'
+
+mpv = MpvCtl::Mpv.new
+mpv.socket.command(*ARGV)
+mpv.close
