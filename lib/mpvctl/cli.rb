@@ -21,11 +21,11 @@ module MpvCtl
     def seek(seconds)
       seek = :relative
       if seconds =~ /\A-(.*)\z/
-        seconds = -Integer($1)
+        seconds = -Util.parse_time($1)
       elsif seconds =~ /\A\+(.*)\z/
-        seconds = Integer($1)
+        seconds = Util.parse_time($1)
       else
-        seconds = Integer(seconds)
+        seconds = Util.parse_time(seconds)
         seek = :absolute
       end
       with_mpv do |mpv|
