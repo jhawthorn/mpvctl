@@ -13,11 +13,11 @@ module MpvCtl
     end
 
     def command(*args)
-      payload = JSON.dump({ "command" => args })
-      puts payload
+      payload = JSON.dump({"command" => args})
+      MpvCtl.logger.debug payload
       socket.puts(payload)
       response = socket.readline
-      puts response
+      MpvCtl.logger.debug response
       parse_response(response)
     end
 
