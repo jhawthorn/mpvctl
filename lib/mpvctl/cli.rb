@@ -15,7 +15,14 @@ module MpvCtl
     desc "raw CMD", "Issue a raw mpv IPC command to the socket"
     def raw(*command)
       with_mpv do |mpv|
-        mpv.socket.command(*command)
+        response = mpv.socket.command(*command)
+        case response
+        when nil
+        when Array,Hash
+          puts JSON.pretty_generate(response)
+        else
+          p response
+        end
       end
     end
 
