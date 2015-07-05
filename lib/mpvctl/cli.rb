@@ -3,6 +3,8 @@ require 'mpvctl'
 
 module MpvCtl
   class CLI < ::Thor
+    class_option :verbose, type: :boolean, aliases: '-v'
+
     desc "play FILE|URL", "Play a file or URL"
     def play(filename)
       with_mpv do |mpv|
@@ -43,6 +45,8 @@ module MpvCtl
 
     private
     def with_mpv
+      MpvCtl.logger.level = Logger::DEBUG if options[:verbose]
+
       mpv = MpvCtl::Mpv.new
       yield mpv
       mpv.close
