@@ -21,5 +21,15 @@ module MpvCtl
       end
       nil
     end
+
+    def format_time(seconds)
+      seconds = seconds.to_i
+      minutes = seconds / 60
+      hours = minutes / 60
+      seconds %= 60
+      minutes %= 60
+
+      "%i:%.2i:%.2i" % [hours, minutes, seconds]
+    end
   end
 end

@@ -43,6 +43,22 @@ module MpvCtl
       end
     end
 
+    desc "status", "Prints the current status"
+    def status
+      with_mpv do |mpv|
+        idle = mpv.get_property('idle')
+        if !idle
+          puts "playing: \"#{mpv.get_property('media-title')}\""
+          puts "path: #{mpv.get_property('path')}"
+          puts "pause: #{mpv.get_property('pause')}"
+
+          time_pos = mpv.get_property('time-pos')
+          time_rem = mpv.get_property('time-remaining')
+          puts "pos: #{Util.format_time time_pos}/#{Util.format_time time_pos+time_rem}"
+        end
+      end
+    end
+
     private
     def with_mpv
       MpvCtl.logger.level = Logger::DEBUG if options[:verbose]
