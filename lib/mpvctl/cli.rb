@@ -49,6 +49,7 @@ module MpvCtl
 
       mpv = MpvCtl::Mpv.new
       yield mpv
+    ensure
       mpv.close
     end
 
