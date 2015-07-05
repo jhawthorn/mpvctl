@@ -14,11 +14,33 @@ module MpvCtl
 
     def command(*args)
       payload = JSON.dump({"command" => args})
-      MpvCtl.logger.debug payload
-      socket.puts(payload)
-      response = socket.readline
-      MpvCtl.logger.debug response
+
+      send(payload)
+      response = recv
+
       parse_response(response)
+    end
+
+    def watch
+      loop do
+        yield JSON.parse(recv)
+      end
+    end
+
+    def close
+      @socket.close
+    end
+
+    private
+    def send(line)
+      MpvCtl.logger.debug "SEND: #{line}"
+      socket.puts(line)
+    end
+
+    def recv
+      line = socket.readline.strip
+      MpvCtl.logger.debug "RECV: #{line}"
+      line
     end
 
     def parse_response(json)
@@ -30,15 +52,5 @@ module MpvCtl
       end
     end
 
-    def watch
-      loop do
-        line = socket.readline
-        yield JSON.parse(line)
-      end
-    end
-
-    def close
-      @socket.close
-    end
   end
 end
