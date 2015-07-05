@@ -3,6 +3,9 @@ require 'json'
 
 module MpvCtl
   class Socket
+    class Error < StandardError
+    end
+
     attr_reader :socket
 
     def initialize(path)
@@ -15,7 +18,16 @@ module MpvCtl
       socket.puts(payload)
       response = socket.readline
       puts response
-      JSON.parse(response)
+      parse_response(response)
+    end
+
+    def parse_response(json)
+      response = JSON.parse(json)
+      if response['error'] == 'success'
+        response['data']
+      else
+        raise Error, response['error']
+      end
     end
 
     def watch

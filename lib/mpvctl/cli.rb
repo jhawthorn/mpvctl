@@ -33,6 +33,14 @@ module MpvCtl
       end
     end
 
+    desc "toggle", "Toggles between play and pause"
+    def toggle
+      with_mpv do |mpv|
+        state = mpv.get_property('pause')
+        mpv.set_property('pause', !state)
+      end
+    end
+
     private
     def with_mpv
       mpv = MpvCtl::Mpv.new

@@ -22,6 +22,14 @@ module MpvCtl
       socket.command 'seek', seconds, type
     end
 
+    def get_property(prop)
+      socket.command('get_property', prop)
+    end
+
+    def set_property(prop, value)
+      socket.command('set_property', prop, value)
+    end
+
     def close
       socket.close
     end
