@@ -11,6 +11,7 @@ module MpvCtl
 
     # Parse a time string to an integer in seconds
     def parse_time(string)
+      return nil if string.empty?
       TIME_REGEXPS.each do |regex|
         if match = regex.match(string)
           hours   = Integer(match.names.include?('hours')   && match[:hours]   || 0)

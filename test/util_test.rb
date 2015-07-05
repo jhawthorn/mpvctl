@@ -17,9 +17,7 @@ module MpvCtl
     end
 
     def test_parse_empty_string
-      # FIXME: this isn't quite right and should probably fail
-      # However this works well enough
-      assert_parsed 0, ""
+      assert_parsed nil, ""
     end
 
     def test_parse_colon_separated
