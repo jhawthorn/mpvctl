@@ -4,8 +4,8 @@ module MpvCtl
 
     TIME_REGEXPS = [
       /\A(?<seconds>\d+)\z/,
-      /\A(?<minutes>\d+):(?<seconds>\d+)\z/,
-      /\A(?<hours>\d+):(?<minutes>\d+):(?<seconds>\d+)\z/,
+      /\A(?<minutes>\d+):(?<seconds>\d\d)\z/,
+      /\A(?<hours>\d+):(?<minutes>\d\d):(?<seconds>\d\d)\z/,
       /\A((?<hours>\d+)h)?((?<minutes>\d+)m)?((?<seconds>\d+)s?)?\z/
     ]
 

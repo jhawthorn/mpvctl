@@ -9,6 +9,17 @@ module MpvCtl
       assert_parsed 60, "60"
       assert_parsed 120, "120"
       assert_parsed 12345, "12345"
+
+      refute_parsed "0.5"
+      refute_parsed "5.0"
+      refute_parsed "a"
+      refute_parsed "a minute thirty"
+    end
+
+    def test_parse_empty_string
+      # FIXME: this isn't quite right and should probably fail
+      # However this works well enough
+      assert_parsed 0, ""
     end
 
     def test_parse_colon_separated
@@ -25,6 +36,14 @@ module MpvCtl
       assert_parsed 3600, "01:00:00"
       assert_parsed 3661, "01:01:01"
       assert_parsed 86400, "24:00:00"
+
+      refute_parsed ":"
+      refute_parsed ":0"
+      refute_parsed ":00"
+      refute_parsed "::"
+      refute_parsed "::0"
+      refute_parsed "5:0"
+      refute_parsed "0:0"
     end
 
     def test_parse_letters
@@ -40,11 +59,20 @@ module MpvCtl
       assert_parsed 3661, "1h1m1s"
       assert_parsed 3605, "1h5s"
       assert_parsed 86400, "24h"
+
+      refute_parsed "s"
+      refute_parsed "m"
+      refute_parsed "h"
+      refute_parsed "5ms"
     end
 
     private
     def assert_parsed(expected, input)
       assert_equal expected, Util.parse_time(input), "Expected #{input.inspect} to parse to #{expected.inspect}"
+    end
+
+    def refute_parsed(input)
+      assert_equal nil, Util.parse_time(input), "#{input.inspect} should not be a valid time"
     end
   end
 end
