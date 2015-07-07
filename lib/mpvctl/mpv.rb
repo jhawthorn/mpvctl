@@ -8,8 +8,14 @@ module MpvCtl
       @socket = Socket.new('/tmp/mpvsocket')
     end
 
-    def play(path)
-      socket.command 'loadfile', path
+    def play(path, mode=:replace)
+      mode =
+        case mode
+        when :replace then 'replace'
+        when :append then 'append-play'
+        else raise ArgumentError, "unknown play mode"
+        end
+      socket.command 'loadfile', path, mode
     end
 
     def seek(seconds, type)

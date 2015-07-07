@@ -12,6 +12,13 @@ module MpvCtl
       end
     end
 
+    desc "add FILE|URL", "Append a file or URL to the current playlist"
+    def add(filename)
+      with_mpv do |mpv|
+        mpv.play abspath(filename), :append
+      end
+    end
+
     desc "raw CMD", "Issue a raw mpv IPC command to the socket"
     def raw(*command)
       with_mpv do |mpv|
