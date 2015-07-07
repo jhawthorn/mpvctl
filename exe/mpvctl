@@ -3,4 +3,9 @@
 require 'mpvctl'
 require 'mpvctl/cli'
 
-MpvCtl::CLI.start(ARGV)
+begin
+  MpvCtl::CLI.start(ARGV)
+rescue MpvCtl::Socket::Error
+  STDERR.puts "Error from mpv: #{$!.message}"
+  exit 1
+end
