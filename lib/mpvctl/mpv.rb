@@ -28,6 +28,10 @@ module MpvCtl
       socket.command 'seek', seconds, type
     end
 
+    def stop
+      socket.command('stop')
+    end
+
     def get_property(prop)
       socket.command('get_property', prop)
     end

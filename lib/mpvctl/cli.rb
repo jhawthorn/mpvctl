@@ -84,6 +84,13 @@ module MpvCtl
       end
     end
 
+    desc "stop", "Stops playback"
+    def stop
+      with_mpv do |mpv|
+        mpv.stop
+      end
+    end
+
     private
     def with_mpv
       MpvCtl.logger.level = Logger::DEBUG if options[:verbose]
