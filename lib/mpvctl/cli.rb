@@ -46,14 +46,8 @@ module MpvCtl
 
     desc "seek [+-]SECONDS", "Seeks by seconds."
     def seek(seconds)
-      seek = :relative
-      if seconds =~ /\A-(.*)\z/
-        seconds = -Util.parse_time($1)
-      elsif seconds =~ /\A\+(.*)\z/
-        seconds = Util.parse_time($1)
-      else
-        seconds = Util.parse_time(seconds)
-        seek = :absolute
+      seek, seconds = parse_relative(seconds) do |time|
+        Util.parse_time(time)
       end
       with_mpv do |mpv|
         mpv.seek(seconds, seek)
@@ -91,6 +85,20 @@ module MpvCtl
       end
     end
 
+    desc "volume [VOLUME]", "Get or set volume"
+    def volume(volume=nil)
+      with_mpv do |mpv|
+        if volume
+          seek, volume = parse_relative(volume)
+          if seek == :relative
+            volume += mpv.get_property('volume')
+          end
+          mpv.set_property('volume', volume)
+        end
+        p mpv.get_property('volume')
+      end
+    end
+
     private
     def with_mpv
       MpvCtl.logger.level = Logger::DEBUG if options[:verbose]
@@ -106,6 +114,17 @@ module MpvCtl
         File.expand_path(filename)
       else
         filename
+      end
+    end
+
+    def parse_relative(s, &block)
+      block ||= ->(s){ s.to_f }
+      if s =~ /\A-(.*)\z/
+        [:relative, -block.call($1)]
+      elsif s =~ /\A\+(.*)\z/
+        [:relative, block.call($1)]
+      else
+        [:absolute, block.call(s)]
       end
     end
   end
