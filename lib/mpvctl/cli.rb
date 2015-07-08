@@ -10,9 +10,8 @@ module MpvCtl
       with_mpv do |mpv|
         if filename
           mpv.play abspath(filename)
-        else
-          mpv.set_property('pause', false)
         end
+        mpv.set_property('pause', false)
       end
     end
 
