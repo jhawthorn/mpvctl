@@ -30,6 +30,16 @@ module MpvCtl
       end
     end
 
+    desc "prev", "Switch to previous item in the playlist"
+    def prev
+      with_mpv { |mpv| mpv.prev }
+    end
+
+    desc "next", "Switch to next item in the playlist"
+    def next
+      with_mpv { |mpv| mpv.next }
+    end
+
     desc "raw CMD", "Issue a raw mpv IPC command to the socket"
     def raw(*command)
       with_mpv do |mpv|
@@ -78,7 +88,7 @@ module MpvCtl
       end
     end
 
-    desc "stop", "Stops playback"
+    desc "stop", "Stops playback and clears the playlist."
     def stop
       with_mpv do |mpv|
         mpv.stop

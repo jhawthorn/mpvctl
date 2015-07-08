@@ -28,6 +28,14 @@ module MpvCtl
       command 'seek', seconds, type
     end
 
+    def next
+      command 'playlist-next'
+    end
+
+    def prev
+      command 'playlist-prev'
+    end
+
     def stop
       command 'stop'
     end
