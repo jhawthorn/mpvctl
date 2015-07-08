@@ -93,6 +93,10 @@ module MpvCtl
           if seek == :relative
             volume += mpv.get_property('volume')
           end
+
+          # clamp volume to 0-100
+          volume = [0, volume, 100].sort[1]
+
           mpv.set_property('volume', volume)
         end
         p mpv.get_property('volume')
