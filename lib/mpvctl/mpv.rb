@@ -15,7 +15,7 @@ module MpvCtl
         when :append then 'append-play'
         else raise ArgumentError, "unknown play mode"
         end
-      socket.command 'loadfile', path, mode
+      command 'loadfile', path, mode
     end
 
     def seek(seconds, type)
@@ -25,19 +25,23 @@ module MpvCtl
         when :absolute then 'absolute'
         else raise ArgumentError, "unknown seek type"
         end
-      socket.command 'seek', seconds, type
+      command 'seek', seconds, type
     end
 
     def stop
-      socket.command('stop')
+      command 'stop'
     end
 
     def get_property(prop)
-      socket.command('get_property', prop)
+      command 'get_property', prop
     end
 
     def set_property(prop, value)
-      socket.command('set_property', prop, value)
+      command 'set_property', prop, value
+    end
+
+    def command(*args)
+      socket.command *args
     end
 
     def close
