@@ -5,10 +5,21 @@ module MpvCtl
   class CLI < ::Thor
     class_option :verbose, type: :boolean, aliases: '-v'
 
-    desc "play FILE|URL", "Play a file or URL"
-    def play(filename)
+    desc "play [FILE|URL]", "Play a file or URL. With no arguments this will unpause."
+    def play(filename=nil)
       with_mpv do |mpv|
-        mpv.play abspath(filename)
+        if filename
+          mpv.play abspath(filename)
+        else
+          mpv.set_property('pause', false)
+        end
+      end
+    end
+
+    desc "pause", "Pause the playback."
+    def pause
+      with_mpv do |mpv|
+        mpv.set_property('pause', true)
       end
     end
 
