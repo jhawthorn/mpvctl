@@ -16,9 +16,20 @@ module MpvCtl
       payload = JSON.dump({"command" => args})
 
       send(payload)
-      response = recv
 
-      parse_response(response)
+      watch do |response|
+        if response['error']
+          return parse_response(response)
+        end
+      end
+    end
+
+    def wait_for_event(name)
+      watch do |response|
+        if response['event'] == name
+          return response
+        end
+      end
     end
 
     def watch
@@ -43,14 +54,12 @@ module MpvCtl
       line
     end
 
-    def parse_response(json)
-      response = JSON.parse(json)
+    def parse_response(response)
       if response['error'] == 'success'
         response['data']
       else
         raise Error, response['error']
       end
     end
-
   end
 end
