@@ -48,6 +48,10 @@ module MpvCtl
       command 'set_property', prop, value
     end
 
+    def wait_for_event(*events)
+      socket.wait_for_event(*events)
+    end
+
     def command(*args)
       socket.command *args
     end

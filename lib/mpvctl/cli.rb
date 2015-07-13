@@ -15,6 +15,13 @@ module MpvCtl
       end
     end
 
+    desc "wait", "Waits until the player is idle"
+    def wait
+      with_mpv do |mpv|
+        mpv.wait_for_event('idle')
+      end
+    end
+
     desc "pause", "Pause the playback."
     def pause
       with_mpv do |mpv|
