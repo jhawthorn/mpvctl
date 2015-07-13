@@ -6,12 +6,16 @@ module MpvCtl
     class_option :verbose, type: :boolean, aliases: '-v'
 
     desc "play [FILE|URL]", "Play a file or URL. With no arguments this will unpause."
+    class_option :wait, type: :boolean, aliases: '-w'
     def play(filename=nil)
       with_mpv do |mpv|
         if filename
           mpv.play abspath(filename)
         end
         mpv.set_property('pause', false)
+        if options[:wait]
+          mpv.wait_for_event('idle')
+        end
       end
     end
 
