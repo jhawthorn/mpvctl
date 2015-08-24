@@ -1,4 +1,5 @@
 require "mpvctl/socket"
+require "mpvctl/playlist_item"
 
 module MpvCtl
   class Mpv
@@ -38,6 +39,12 @@ module MpvCtl
 
     def stop
       command 'stop'
+    end
+
+    def playlist
+      get_property('playlist').map.with_index do |item, index|
+        PlaylistItem.new(self, index+1, item)
+      end
     end
 
     def toggle_property(prop)

@@ -131,6 +131,15 @@ module MpvCtl
       end
     end
 
+    desc "playlist", "Show the current playlist"
+    def playlist
+      with_mpv do |mpv|
+        mpv.playlist.each do |item|
+          puts "#{item.playing?? '*' : ' '} %2i %s" % [item.index, item.filename]
+        end
+      end
+    end
+
     private
     def with_mpv
       MpvCtl.logger.level = Logger::DEBUG if options[:verbose]
