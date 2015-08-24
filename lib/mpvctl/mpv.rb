@@ -40,6 +40,14 @@ module MpvCtl
       command 'stop'
     end
 
+    def toggle_property(prop)
+      set_property(prop, !get_property(prop))
+    end
+
+    def get_property(prop)
+      command 'get_property', prop
+    end
+
     def get_property(prop)
       command 'get_property', prop
     end
