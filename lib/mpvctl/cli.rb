@@ -1,6 +1,7 @@
 require 'thor'
 require 'mpvctl'
 require 'mpvctl/terminal_input'
+require 'pathname'
 
 module MpvCtl
   class CLI < ::Thor
@@ -156,6 +157,20 @@ module MpvCtl
       else
         filename
       end
+    end
+
+    def abspaths(filenames)
+      paths = []
+      filenames.each do |root|
+        if root =~ %r{\A(https?|rtmp)://}
+          paths << root
+        else
+          Pathname(root).find do |path|
+            paths << abspath(path) if path.file?
+          end
+        end
+      end
+      paths
     end
 
     def parse_relative(s, &block)
