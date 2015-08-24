@@ -9,15 +9,31 @@ module MpvCtl
 
     desc "play [FILE|URL]", "Play a file or URL. With no arguments this will unpause."
     class_option :wait, type: :boolean, aliases: '-w'
-    def play(filename=nil)
+    class_option :input, type: :boolean, aliases: '-i'
+    class_option :shuffle, type: :boolean, aliases: '-R'
+    def play(*filenames)
       with_mpv do |mpv|
-        if filename
-          mpv.play abspath(filename)
+        if filenames.any?
+          mpv.stop
+          mpv.wait_for_idle
+
+          filenames = abspaths(filenames)
+          filenames.shuffle! if options[:shuffle]
+          filenames.each do |filename|
+            mpv.add filename
+          end
+          mpv.wait_for_event('tracks-changed')
+
+          if options[:input]
+            TerminalInput.new(mpv).run
+          end
+
+          if options[:wait]
+            mpv.wait_for_idle
+          end
         end
+
         mpv.set_property('pause', false)
-        if options[:wait]
-          mpv.wait_for_event('idle')
-        end
       end
     end
 
@@ -38,7 +54,14 @@ module MpvCtl
     desc "add FILE|URL", "Append a file or URL to the current playlist"
     def add(filename)
       with_mpv do |mpv|
-        mpv.play abspath(filename), :append
+        mpv.add abspath(filename)
+      end
+    end
+
+    desc "prepend FILE|URL", "Prepend a file or URL to the current playlist and begin playing"
+    def prepend(filename)
+      with_mpv do |mpv|
+        mpv.add abspath(filename)
       end
     end
 

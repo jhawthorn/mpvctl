@@ -10,13 +10,11 @@ module MpvCtl
     end
 
     def play(path, mode=:replace)
-      mode =
-        case mode
-        when :replace then 'replace'
-        when :append then 'append-play'
-        else raise ArgumentError, "unknown play mode"
-        end
-      command 'loadfile', path, mode
+      command 'loadfile', path, 'replace'
+    end
+
+    def add(path, mode=:replace)
+      command 'loadfile', path, 'append-play'
     end
 
     def seek(seconds, type)
@@ -61,6 +59,12 @@ module MpvCtl
 
     def set_property(prop, value)
       command 'set_property', prop, value
+    end
+
+    def wait_for_idle
+      until get_property('idle')
+        sleep 0.1
+      end
     end
 
     def wait_for_event(*events)
