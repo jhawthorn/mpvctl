@@ -1,5 +1,6 @@
 require 'thor'
 require 'mpvctl'
+require 'mpvctl/terminal_input'
 
 module MpvCtl
   class CLI < ::Thor
@@ -120,6 +121,13 @@ module MpvCtl
           mpv.set_property('volume', volume)
         end
         p mpv.get_property('volume')
+      end
+    end
+
+    desc "input", "Send read STDIN as keyboard input to mpv"
+    def input
+      with_mpv do |mpv|
+        TerminalInput.new(mpv).run
       end
     end
 

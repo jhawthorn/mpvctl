@@ -25,15 +25,15 @@ module MpvCtl
         when :absolute then 'absolute'
         else raise ArgumentError, "unknown seek type"
         end
-      command 'seek', seconds, type
+      osd_command 'seek', seconds, type
     end
 
-    def next
-      command 'playlist-next'
+    def next(force=false)
+      command 'playlist-next', (force ? 'force' : 'weak')
     end
 
-    def prev
-      command 'playlist-prev'
+    def prev(force=false)
+      command 'playlist-prev', (force ? 'force' : 'weak')
     end
 
     def stop
@@ -50,6 +50,10 @@ module MpvCtl
 
     def wait_for_event(*events)
       socket.wait_for_event(*events)
+    end
+
+    def osd_command(*args)
+      socket.command 'osd-msg-bar', *args
     end
 
     def command(*args)
