@@ -164,6 +164,15 @@ module MpvCtl
       end
     end
 
+    desc "logs", "show logs from running mpv"
+    def logs
+      with_mpv do |mpv|
+        mpv.socket.watch do |json|
+          p json
+        end
+      end
+    end
+
     private
     def with_mpv
       MpvCtl.logger.level = Logger::DEBUG if options[:verbose]
